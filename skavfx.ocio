@@ -1,0 +1,107 @@
+ocio_profile_version: 1
+
+search_path: ""
+
+roles:
+  default: raw
+
+displays:
+  SKA:
+    - !<View>
+      name: SKAVFX
+      colorspace: SKAVFX
+  rec709:
+    - !<View>
+      name: rec709
+      colorspace: rec709
+  sRGB:
+    - !<View>
+      name: sRGB
+      colorspace: sRGB
+  raw:
+    - !<View>
+      name: raw
+      colorspace: raw
+
+active_displays: [SKA,rec709,sRGB, raw]
+active_views: [Default,rec709,sRGB, raw]
+
+colorspaces:
+  - !<ColorSpace>
+    name: raw
+    family: display
+    equality_group: ""
+    bit_depth: unknown
+    is_data: false
+    allocation: uniform
+    allocation_vars: [0, 1]
+
+  - !<ColorSpace>
+    name: sRGB
+    family: display
+    equality_group: ""
+    bit_depth: unknown
+    is_data: false
+    allocation: uniform
+    allocation_vars: [0, 1]
+
+  - !<ColorSpace>
+    name: rec709
+    family: display
+    equality_group: ""
+    bit_depth: unknown
+    is_data: false
+    allocation: uniform
+    allocation_vars: [0, 1]
+
+  - !<ColorSpace>
+    name: arrilogc
+    family: Input/ARRI
+    equality_group: ""
+    bit_depth: 32f
+    description: |
+      V3 LogC (EI800) - Wide Gamut
+      ACES Transform ID: IDT.ARRI.Alexa-v3-logC-EI800.a1.v1
+    is_data: false
+    allocation: uniform
+    allocation_vars: [0, 1]
+    from_reference: !<GroupTransform>
+      children:
+        - !<MatrixTransform> {matrix: [0.680206, 0.236137, 0.083658, 0, 0.085415, 1.01747, -0.102886, 0, 0.002057, -0.062563, 1.06051, 0, 0, 0, 0, 1]}
+        - !<FileTransform> {src: V3_LogC_800_to_linear.spi1d, interpolation: linear}
+
+  - !<ColorSpace>
+    name: skavfx
+    family: display
+    equality_group: ""
+    bit_depth: unknown
+    is_data: false
+    allocation: uniform
+    allocation_vars: [0, 1]
+    file_transform:
+      src: luts/SKA_Rec709.cube
+      interpolation: linear
+    to_reference: !<GroupTransform>
+      children:
+        - !<FileTransform> {src: luts/SKA_Rec709.cube, interpolation: linear}
+        - !<ColorSpaceTransform> {src: linear, dst: arrilogc}
+
+views:
+  - !<View>
+    name: Default
+    colorspace: skavfx
+    display: SKA
+  - !<View>
+    name: sRGB
+    colorspace: sRGB
+    display: sRGB
+  - !<View>
+    name: rec709
+    colorspace: rec709
+    display: rec709
+  - !<View>
+    name: raw
+    colorspace: raw
+    display: raw
+  
+  
