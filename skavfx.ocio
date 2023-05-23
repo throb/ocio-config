@@ -49,10 +49,11 @@ displays:
     - !<View> {name: Raw, colorspace: Utility - Raw}
     - !<View> {name: Log, colorspace: Input - ADX - ADX10}
     - !<View> {name: SKAVFX, colorspace: SKAVFX}
+    - !<View> {name: SKAVFX_NOINPUT, colorspace: SKAVFX_NOINPUT}    
 
 active_displays: [ACES]
 # active_views: [sRGB, DCDM, DCDM P3D60 Limited, DCDM P3D65 Limited, P3-D60, P3-D65 ST2084 1000 nits, P3-D65 ST2084 2000 nits, P3-D65 ST2084 4000 nits, P3-DCI D60 simulation, P3-DCI D65 simulation, P3D65, P3D65 D60 simulation, P3D65 Rec.709 Limited, P3D65 ST2084 108 nits, Rec.2020, Rec.2020 P3D65 Limited, Rec.2020 Rec.709 Limited, Rec.2020 HLG 1000 nits, Rec.2020 ST2084 1000 nits, Rec.2020 ST2084 2000 nits, Rec.2020 ST2084 4000 nits, Rec.709, Rec.709 D60 sim., sRGB D60 sim., Raw, Log]
-active_views: [sRGB, Rec.709, Raw, Log, SKAVFX]
+active_views: [sRGB, Rec.709, Raw, Log, SKAVFX, SKAVFX_NOINPUT]
 
 colorspaces:
   - !<ColorSpace>
@@ -4982,4 +4983,20 @@ colorspaces:
     from_reference: !<GroupTransform>
       children:
         - !<ColorSpaceTransform> {src: ACES - ACES2065-1, dst: Input - ARRI - V3 LogC (EI800) - Wide Gamut}
+        - !<FileTransform> {src: SKA_Rec709.cube, interpolation: linear}
+
+  - !<ColorSpace>
+    name: SKAVFX_NOINPUT
+    family: SKAVFX # will create if it doesn't exist
+    equalitygroup: ""
+    bitdepth: 32f
+    description: |
+      The ACEScg color space
+      
+      ACES Transform ID : ACEScsc.Academy.ACEScg_to_ACES
+    isdata: false
+    allocation: lg2
+    allocationvars: [-8, 5, 0.00390625]
+    from_reference: !<GroupTransform>
+      children:
         - !<FileTransform> {src: SKA_Rec709.cube, interpolation: linear}
